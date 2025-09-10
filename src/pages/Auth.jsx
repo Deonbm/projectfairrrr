@@ -14,40 +14,76 @@ function Auth({insideRegister}) {
   const {setIsAuthosided}=useContext(tokenAuthContext)
   const[userData,setUserData]=useState({username:"",email:"",password:""})
   const[isLoggedIn,setIsLoggedIn]=useState(false)
+  const[error,setError]=useState({})
   const navigate =useNavigate()
   console.log(userData);
 
+  const regexEmail=/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+  const validate =(values)=>{
+       const errors={}
+      if(insideRegister && !values.username){
+        errors.username="Username is required"
+      }
+      if(!values.email){
+        errors.email="Email is required"
+  }
+  else{
+     if (!regexEmail.test(values.email)) {
+      errors.email="Enter a valid email"
+     }
+    }
+     if (!values.password) {
+      errors.password="Password is required"
+     }
+
+      return errors
+    }
+  
+
   const handleRegister=async(e)=>{
     e.preventDefault()
-    const {username,email,password}=userData
-    if (username && email && password) {
-    // api call
+    const validation= validate(userData)
+    setError(validation)
+    if (Object.keys(validation).length>0) {
+      return
+    }
     
-    const result= await registerAPI(userData)
+    try {
+      const result= await registerAPI(userData)
     console.log(result);  
 
     if (result.status==200) {
+      toast.success("Registered Successfully")
       navigate('/login')
       setUserData({username:"",email:"",password:""})
+      setError({})
+      console.log(error);
+      
     }
     else{
       if (result.status==406) {
         alert(result.response.data)
         setUserData({username:"",email:"",password:""})
-
+        
         
       }
       
     }
-    }else{
-      toast.warning("please fill in the form")
+    } catch (error) {
+      console.log(error);
     }
+    
    
   }
 
   const handleLogin= async(e)=>{
-    e.preventDefault
-    if (userData.email && userData.password) {
+    e.preventDefault()
+    const validation= validate(userData)
+    setError(validation)
+    if (Object.keys(validation).length>0) {
+      return;
+    }
       // api call
       try {
         const result=await loginAPI(userData)
@@ -61,22 +97,25 @@ function Auth({insideRegister}) {
             console.log(result.data.user);           
           sessionStorage.setItem("token",result.data.token)
           setUserData({username:"",email:"",password:""})
+          setError({})
           navigate('/')
           setIsLoggedIn(false)
           }, 2000);
+          
+          
         }
         else {
 if(result.status==404){
             toast.error(result.response.data)
+       
+            
 }        }
         
       } catch (error) {
         console.log(error);
         
       }
-    } else{
-      toast.warning('Please in the fields ')
-    }
+    
   }
   
   return (
@@ -92,10 +131,20 @@ if(result.status==404){
         <h5 className='mb-2 fw-bold'><i class="fa-brands fa-rebel" style={{color:'#732b2f'}}></i>Project Fair</h5>
         <div className='text-secondary mb-5'>Sign Up to Your Account</div>
 {   insideRegister &&     
-  <Form.Control value={userData.username} onChange={e=>setUserData({...userData,username:e.target.value})} type="text" placeholder="User Name"  className='mb-3'/>
-}        <Form.Control value={userData.email} onChange={e=>setUserData({...userData,email:e.target.value})} type="email" placeholder="Email Address"  className='mb-3'/>
-        <Form.Control value={userData.password} onChange={e=>setUserData({...userData,password:e.target.value})} type="password" placeholder="Password"  className='mb-3'/>
-        {
+  <div>
+    <Form.Control value={userData.username} onChange={e=>setUserData({...userData,username:e.target.value})} type="text" placeholder="User Name"  className='mb-3'/>
+    <div className='text-danger'>{error.username}</div>
+  </div>
+}       
+<div>
+<Form.Control value={userData.email} onChange={e=>setUserData({...userData,email:e.target.value})} type="email" placeholder="Email Address"  className='mb-3'/>
+<div className='text-danger'>{error.email}
+  </div>  
+</div>      
+<div>
+<Form.Control value={userData.password} onChange={e=>setUserData({...userData,password:e.target.value})} type="password" placeholder="Password"  className='mb-3'/>
+<div className='text-danger'>{error.password}</div>
+  </div>        {
           insideRegister?
           <div>
             <button onClick={e=>handleRegister(e)} className='btn btn-success w-100  '> Sign Up</button>

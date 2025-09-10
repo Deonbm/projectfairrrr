@@ -11,24 +11,28 @@ import { useContext } from 'react'
 import { tokenAuthContext } from './contexts/ContextAPI'
 
 function App() {
-    const {isAuthosided}=useContext(tokenAuthContext)
-  
+  // Access authentication context
+  const { isAuthosided } = useContext(tokenAuthContext)
 
   return (
     <>
-    <ToastContainer
-position="top-right"
-theme="colored"
-/>
-     <Routes>
-      <Route path='/'  element={<Home/>}/>
-      <Route path='/login'  element={<Auth/>}/>
-      <Route path='/register'  element={<Auth insideRegister={true}/>}/>
-      <Route path='/dashboard'  element={isAuthosided?<Dashboard/>:<Navigate to={'/login'}/>}/>
-      <Route path='/projects'  element={isAuthosided?<Projects/>:<Navigate to={'/login'}/>}/>
-      
-     </Routes>
-     <Footer/>
+      {/* Toast notifications */}
+      <ToastContainer position="top-right" theme="colored" />
+
+      {/* Define application routes */}
+      <Routes>
+        {/* Public routes */}
+        <Route path='/' element={<Home />} />
+        <Route path='/login' element={<Auth />} />
+        <Route path='/register' element={<Auth insideRegister={true} />} />
+
+        {/* Protected routes */}
+        <Route path='/dashboard' element={isAuthosided ? <Dashboard /> : <Navigate to={'/login'} />} />
+        <Route path='/projects' element={isAuthosided ? <Projects /> : <Navigate to={'/login'} />} />
+      </Routes>
+
+      {/* Footer component */}
+      <Footer />
     </>
   )
 }
