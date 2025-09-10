@@ -1,3 +1,3 @@
-const server_url='https://projectfairserver-n40v.onrender.com'
+const server_url='https://projectfrserver.onrender.com'
 
 export default server_url   
