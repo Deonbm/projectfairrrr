@@ -22,8 +22,9 @@ function Header() {
       {/* Navbar with a brand and logout button */}
       <Navbar expand="lg" className="bg-primary">
         <Container>
-          <Navbar.Brand href="#home">
-            <i className="fa-brands fa-rebel" style={{ color: '#732b2f' }}></i>Project Fair
+          <Navbar.Brand >
+            <Link className='text-decoration-none text-light' to={'/'}><i className="fa-brands fa-rebel" style={{ color: '#732b2f' }}></i>Project Fair
+            </Link>
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
