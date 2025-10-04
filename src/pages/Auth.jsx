@@ -63,7 +63,7 @@ function Auth({insideRegister}) {
     }
     else{
       if (result.status==406) {
-        alert(result.response.data)
+        toast.warning(result.response.data)
         setUserData({username:"",email:"",password:""})
         
         
