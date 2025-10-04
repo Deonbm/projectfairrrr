@@ -1,9 +1,11 @@
 import commonAPI from "./commonApi";
-import server_url from "./server_url";
+import server_url from './server_url'
 
 // register
 
 export const registerAPI=async(reqBody)=>{
+  console.log(server_url);
+  
    return await commonAPI("POST",`${server_url}/register`,reqBody)
 }   
 

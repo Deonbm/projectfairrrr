@@ -68,6 +68,11 @@ function Auth({insideRegister}) {
         
         
       }
+      if(result.status==403){
+        toast.error("Email verification failed")
+        setUserData({username:"",email:"",password:""})
+        
+      }
       
     }
     } catch (error) {
