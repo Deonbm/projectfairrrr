@@ -1,3 +1,3 @@
-const server_url='https://projectfairserver-xgn6.onrender.com'
+const server_url='https://projectfairserver-z1jh.onrender.com'
 
 export default server_url   
